@@ -56,14 +56,17 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         };
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+    private Mono<Void> onError(ServerWebExchange exchange,
+                               String err,
+                               HttpStatus httpStatus)
+    {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
-
         return response.setComplete();
     }
 
-    private boolean isJwtValid(String jwt) {
+    private boolean isJwtValid(String jwt)
+    {
         boolean returnValue = true;
 
         String subject = null;
@@ -74,21 +77,19 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         JwtParser parser = Jwts.parser()
                 .verifyWith(secretKey)
                 .build();
-
-        try {
-
+        try
+        {
             Claims claims = parser.parseSignedClaims(jwt).getPayload();
             subject = (String) claims.get("sub");
-
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             returnValue = false;
         }
-
-        if (subject == null || subject.isEmpty()) {
+        if (subject == null || subject.isEmpty())
+        {
             returnValue = false;
         }
-
         return returnValue;
     }
-
 }
