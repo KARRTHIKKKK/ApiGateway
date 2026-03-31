@@ -80,7 +80,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         try
         {
             Claims claims = parser.parseSignedClaims(jwt).getPayload();
-            subject = (String) claims.get("sub");
+            subject = claims.getSubject();
         }
         catch (Exception ex)
         {
